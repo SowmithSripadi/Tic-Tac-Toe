@@ -1,0 +1,266 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --cell-size: 10rem;
+  --Mark-size: calc(var(--cell-size) * 0.5);
+  --primary-color: #000000;          /* Black for light mode */
+  --secondary-color: #ffffff;        /* White for light mode */
+  --x-hover-color: lightgray;        /* Hover color for X in light mode */
+  --o-hover-color: #d3d3d3;          /* Hover color for O in light mode */
+  --darkmode-ball-1: rgba(27, 149, 190, 0.559);
+  --darkmode-ball-2: rgba(27, 149, 190, 0.889);
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Corrected */
+  gap: 5rem;
+  font-family: "M PLUS Rounded 1c", Arial, Helvetica, sans-serif;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  align-content: center;
+}
+
+.cell {
+  border: 1px solid var(--primary-color);
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Corrected */
+  position: relative;
+  cursor: pointer;
+}
+
+.cell:nth-child(-n + 3) {
+  border-top: none;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-child(3n + 3) {
+  border-right: none;
+}
+
+.cell:nth-child(n + 7) {
+  border-bottom: none;
+}
+
+/**************/
+/* X Styling */
+/**************/
+
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after {
+  background-color: var(--x-hover-color);
+}
+
+.cell.x::before,
+.cell.x::after {
+  background-color: var(--primary-color);
+}
+
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after {
+  content: "";
+  width: calc(var(--Mark-size) * 0.15);
+  height: var(--Mark-size);
+  position: absolute;
+}
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.o):hover::before {
+  transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.o):hover::after {
+  transform: rotate(-45deg);
+}
+
+/**************/
+/* O Styling */
+/**************/
+
+.board.o .cell:not(.x):not(.o):hover::before,
+.board.o .cell:not(.x):not(.o):hover::after {
+  background-color: var(--o-hover-color);
+}
+
+.cell.o::before,
+.cell.o::after {
+  background-color: var(--primary-color);
+}
+
+.cell.o::before,
+.cell.o::after,
+.board.o .cell:not(.x):not(.o):hover::before,
+.board.o .cell:not(.x):not(.o):hover::after {
+  content: "";
+  width: var(--Mark-size);
+  height: var(--Mark-size);
+  border-radius: 50%;
+  position: absolute;
+}
+
+.cell.o::after,
+.board.o .cell:not(.x):not(.o):hover::after {
+  width: calc(var(--Mark-size) * 0.75);
+  height: calc(var(--Mark-size) * 0.75);
+  background-color: var(--secondary-color);
+}
+
+/**************/
+/* Dark Mode Toggle */
+/**************/
+
+.label {
+  display: block;
+  position: relative;
+  width: 5rem;
+  height: 2rem;
+  background: #ebebeb;
+  border: 2px solid #ffffff;
+  box-shadow:
+    inset 0px 5px 15px rgba(0, 0, 0, 0.119),
+    inset 0px -5px 15px rgba(255, 255, 255, 0.4),
+    0px 5px 15px rgba(0, 0, 0, 0.264);
+  border-radius: 10rem;
+  cursor: pointer;
+}
+
+p {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+}
+
+.whoseTurn {
+  font-size: 2.8rem;
+  letter-spacing: 1.2px;
+}
+
+.darkmode-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Corrected */
+  gap: 5px;
+}
+
+.label::after {
+  content: "";
+  width: 1.25rem;
+  height: 1.25rem;
+  background: linear-gradient(
+    180deg,
+    var(--darkmode-ball-1),
+    var(--darkmode-ball-2)
+  );
+  position: absolute;
+  border-radius: 50%;
+  top: 1.5px;
+  left: 3px;
+  transition: 0.3s;
+}
+
+.checkbx {
+  width: 0;
+  height: 0;
+  visibility: hidden; /* Corrected */
+}
+
+.checkbx:checked + label::after {
+  left: 30px;
+}
+
+.restart {
+  border: none;
+  background-color: #ebebeb;
+  padding: 1.5rem 2.5rem;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  letter-spacing: 1.4px;
+  cursor: pointer;
+}
+
+/* Winning Message Styles */
+.winning-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black background */
+  display: none; /* Hide by default */
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 5rem;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.winning-message button {
+  font-size: 3rem;
+  background-color: white;
+  border: 1px solid black;
+  padding: 1rem 2rem;
+  cursor: pointer;
+}
+
+.winning-message button:hover {
+  background-color: black;
+  color: white;
+  border-color: white;
+}
+
+.winning-message.show {
+  display: flex; /* Display when .show class is added */
+}
+
+/**************/
+/* Dark Mode Adjustments */
+/**************/
+
+body.dark-mode {
+  --primary-color: #ffffff;          /* X and O marks become white */
+  --secondary-color: #000000;        /* Inner circle of O becomes black */
+  --x-hover-color: gray;             /* Hover color for X in dark mode */
+  --o-hover-color: gray;             /* Hover color for O in dark mode */
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .board {
+  background-color: #1e1e1e;
+  border: 1px solid #ffffff;
+}
+
+.dark-mode .cell {
+  border-color: #ffffff;
+}
+
+.dark-mode .winning-message {
+  color: #ffffff;
+}
